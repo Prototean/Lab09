@@ -1,0 +1,6 @@
+services:
+  web:
+    image: teanchai1112/my-web-app:lastest
+    build: .
+    ports:
+      - "8080:80"
