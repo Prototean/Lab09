@@ -2,20 +2,20 @@ FROM node:23-bookworm-slim
 
 WORKDIR /app
 
-# Copy package.json and pnpm-lock.yaml to the working directory
-COPY package.json pnpm-lock.yaml ./
+# Enable pnpm via Node's built-in corepack
+RUN corepack enable pnpm
 
-# Install dependencies
-RUN npm install -g pnpm && pnpm install
+# Copy package files (using wildcard in case the lockfile is missing)
+COPY package.json pnpm-lock.yaml* ./
 
-# Copy the rest of the application code
+# Install dependencies (if you add any later)
+RUN pnpm install
+
+# Copy the rest of your application code (like index.js)
 COPY . .
 
-# Build the project
-RUN pnpm build
-
-# Expose port 3000
+# Expose port 3000 (assuming your app uses this port)
 EXPOSE 3000
 
-# Start the application
-CMD ["node", ".output/server/index.mjs"]
+# Start the application using your main file
+CMD ["node", "index.js"]
